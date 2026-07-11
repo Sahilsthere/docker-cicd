@@ -1,0 +1,30 @@
+name: Docker CI
+
+# This workflow runs automatically on every push to the main branch
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    # Use GitHub's hosted Ubuntu virtual machine to run these steps
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Download a copy of your repository code onto the runner
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Install Python 3.11 on the runner
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Step 3: Install the app's Python dependencies
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # Step 4: Build the Docker image to verify the Dockerfile is valid
+      - name: Build Docker image
+        run: docker build -t practice-app .
